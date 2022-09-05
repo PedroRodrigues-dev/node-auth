@@ -1,0 +1,500 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "AUTH",
+    "description": "Express auth service with JWT and Redis",
+    "license": {
+      "name": "MIT",
+      "url": "https://mit-license.org"
+    },
+    "contact": {
+      "name": "Pedro Rodrigues",
+      "url": "https://github.com/PedroRodrigues-dev",
+      "email": "pedroras004@gmail.com"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/api/v1",
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "JWT": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "x-access-token"
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/loginSuccess"
+            }
+          },
+          "400": {
+            "description": "Login failed",
+            "schema": {
+              "$ref": "#/definitions/loginFailed"
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/register"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "User Already Exists",
+            "schema": {
+              "$ref": "#/definitions/registerUserAlreadyExists"
+            }
+          },
+          "401": {
+            "description": "Unautorized",
+            "schema": {
+              "$ref": "#/definitions/unautorized"
+            }
+          },
+          "403": {
+            "description": "Only Admins",
+            "schema": {
+              "$ref": "#/definitions/adminsOnly"
+            }
+          },
+          "500": {
+            "description": "Failed To Authenticate",
+            "schema": {
+              "$ref": "#/definitions/failedToAuthenticate"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Logged Out",
+            "schema": {
+              "$ref": "#/definitions/loggedOut"
+            }
+          },
+          "401": {
+            "description": "Unautorized",
+            "schema": {
+              "$ref": "#/definitions/unautorized"
+            }
+          },
+          "500": {
+            "description": "Failed To Authenticate",
+            "schema": {
+              "$ref": "#/definitions/failedToAuthenticate"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/users/": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unautorized",
+            "schema": {
+              "$ref": "#/definitions/unautorized"
+            }
+          },
+          "403": {
+            "description": "Only Admins",
+            "schema": {
+              "$ref": "#/definitions/adminsOnly"
+            }
+          },
+          "500": {
+            "description": "Failed To Authenticate",
+            "schema": {
+              "$ref": "#/definitions/failedToAuthenticate"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unautorized",
+            "schema": {
+              "$ref": "#/definitions/unautorized"
+            }
+          },
+          "403": {
+            "description": "Only Admins",
+            "schema": {
+              "$ref": "#/definitions/adminsOnly"
+            }
+          },
+          "500": {
+            "description": "Failed To Authenticate",
+            "schema": {
+              "$ref": "#/definitions/failedToAuthenticate"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "login": {
+                  "type": "string",
+                  "example": ""
+                },
+                "active": {
+                  "type": "string",
+                  "example": ""
+                },
+                "type": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "required": [
+                "login",
+                "type"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unautorized",
+            "schema": {
+              "$ref": "#/definitions/unautorized"
+            }
+          },
+          "403": {
+            "description": "Only Admins",
+            "schema": {
+              "$ref": "#/definitions/adminsOnly"
+            }
+          },
+          "500": {
+            "description": "Failed To Authenticate",
+            "schema": {
+              "$ref": "#/definitions/failedToAuthenticate"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unautorized",
+            "schema": {
+              "$ref": "#/definitions/unautorized"
+            }
+          },
+          "403": {
+            "description": "Only Admins",
+            "schema": {
+              "$ref": "#/definitions/adminsOnly"
+            }
+          },
+          "500": {
+            "description": "Failed To Authenticate",
+            "schema": {
+              "$ref": "#/definitions/failedToAuthenticate"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "login": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "type": "string",
+          "example": "admin"
+        },
+        "password": {
+          "type": "string",
+          "example": "admin"
+        }
+      },
+      "required": [
+        "login",
+        "password"
+      ]
+    },
+    "loginSuccess": {
+      "type": "object",
+      "properties": {
+        "auth": {
+          "type": "boolean",
+          "example": true
+        },
+        "token": {
+          "type": "string",
+          "example": "token"
+        }
+      },
+      "required": [
+        "auth",
+        "token"
+      ]
+    },
+    "loginFailed": {
+      "type": "object",
+      "properties": {
+        "auth": {
+          "type": "boolean",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "Login ou senha inválido"
+        }
+      },
+      "required": [
+        "auth",
+        "message"
+      ]
+    },
+    "unautorized": {
+      "type": "object",
+      "properties": {
+        "auth": {
+          "type": "boolean",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "Nenhum token fornecido"
+        }
+      },
+      "required": [
+        "auth",
+        "message"
+      ]
+    },
+    "failedToAuthenticate": {
+      "type": "object",
+      "properties": {
+        "auth": {
+          "type": "boolean",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "Falha ao autenticar o token"
+        }
+      },
+      "required": [
+        "auth",
+        "message"
+      ]
+    },
+    "loggedOut": {
+      "type": "object",
+      "properties": {
+        "auth": {
+          "type": "boolean",
+          "example": false
+        },
+        "token": {
+          "type": "string",
+          "example": "token"
+        }
+      },
+      "required": [
+        "auth",
+        "token"
+      ]
+    },
+    "userLoggedOut": {
+      "type": "object",
+      "properties": {
+        "auth": {
+          "type": "boolean",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "Usuário foi desconectado"
+        }
+      },
+      "required": [
+        "auth",
+        "message"
+      ]
+    },
+    "adminsOnly": {
+      "type": "object",
+      "properties": {
+        "auth": {
+          "type": "boolean",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "Usuário não é administrador"
+        }
+      },
+      "required": [
+        "auth",
+        "message"
+      ]
+    },
+    "register": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "type": "string",
+          "example": "teste"
+        },
+        "password": {
+          "type": "string",
+          "example": "12345678"
+        },
+        "type": {
+          "type": "string",
+          "example": "default"
+        }
+      },
+      "required": [
+        "login",
+        "password",
+        "type"
+      ]
+    },
+    "registerUserAlreadyExists": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "O usuário já existe"
+        }
+      },
+      "required": [
+        "message"
+      ]
+    }
+  }
+}
